@@ -20,6 +20,8 @@
 
 package org.nd4j.common.resources;
 
+import com.fanglz.util.AppContext;
+import com.fanglz.util.HttpUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
@@ -78,7 +80,8 @@ public class Downloader {
             boolean isCorrectFile = f.exists() && f.isFile() && checkMD5OfFile(targetMD5, f);
             if (attempt < maxTries) {
                 if(!isCorrectFile) {
-                    FileUtils.copyURLToFile(url, f, connectionTimeout, readTimeout);
+//                    FileUtils.copyURLToFile(url, f, connectionTimeout, readTimeout);
+                    HttpUtils.download(url.toExternalForm(), null, null, f, AppContext.getProxy());
                     if (!checkMD5OfFile(targetMD5, f)) {
                         f.delete();
                         download(name, url, f, targetMD5, maxTries, attempt + 1, connectionTimeout, readTimeout);
@@ -126,7 +129,8 @@ public class Downloader {
             boolean isCorrectFile = f.exists() && f.isFile() && checkMD5OfFile(targetMD5, f);
             if (attempt < maxTries) {
                 if(!isCorrectFile) {
-                    FileUtils.copyURLToFile(url, f, connectionTimeout, readTimeout);
+//                    FileUtils.copyURLToFile(url, f, connectionTimeout, readTimeout);
+                    HttpUtils.download(url.toExternalForm(), null, null, f, AppContext.getProxy());
                     if (!checkMD5OfFile(targetMD5, f)) {
                         f.delete();
                         downloadAndExtract(attempt + 1, maxTries, name, url, f, extractToDir, targetMD5, connectionTimeout, readTimeout);
